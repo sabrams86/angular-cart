@@ -2,13 +2,13 @@ app.factory('ShoppingCart', ['$http', '$cookies', function ($http, $cookies) {
   var ShoppingCart = {};
 
   ShoppingCart.getCart = function (cookie) {
-    return $http.get('/carts/' + cookie).then(function (cart) {
+    return $http.get('http://mean-cart.abramswebdevelopment.com/carts/' + cookie).then(function (cart) {
       return cart.data;
     });
   }
 
   ShoppingCart.addItem = function (item, cookie) {
-    return $http.get('/carts/' + cookie).then(function (cart) {
+    return $http.get('http://mean-cart.abramswebdevelopment.com/carts/' + cookie).then(function (cart) {
       var tmp = true;
       cart.data.items.forEach(function (e) {
         if (e.item_id === item.item_id) {
@@ -21,9 +21,9 @@ app.factory('ShoppingCart', ['$http', '$cookies', function ($http, $cookies) {
       }
       return cart.data;
     }).then(function (cart) {
-      return $http.post('/carts/'+cart._id, {cart});
+      return $http.post('http://mean-cart.abramswebdevelopment.com/carts/'+cart._id, {cart});
     }).then(function (cart) {
-      return $http.get('/carts/' + $cookies.get('cart_id')).then(function (cart) {
+      return $http.get('http://mean-cart.abramswebdevelopment.com/carts/' + $cookies.get('cart_id')).then(function (cart) {
         return cart.data;
       })
     });
@@ -34,27 +34,27 @@ app.factory('ShoppingCart', ['$http', '$cookies', function ($http, $cookies) {
     var updatedCart = cart.map(function (e) {
       return {item_id: e.item_id, quantity: Number(e.quantity)};
     });
-    return $http.post('/carts/' + cookie + '/updateitem', {updatedCart})
+    return $http.post('http://mean-cart.abramswebdevelopment.com/carts/' + cookie + '/updateitem', {updatedCart})
   }
 
   ShoppingCart.changeQty = function (cart, cookie) {
     var updatedCart = cart.map(function (e) {
       return {item_id: e.item_id, quantity: Number(e.quantity)};
     });
-    return $http.post('/carts/' + cookie + '/updateitem', {updatedCart})
+    return $http.post('http://mean-cart.abramswebdevelopment.com/carts/' + cookie + '/updateitem', {updatedCart})
   }
 
   ShoppingCart.createCart = function (item) {
-    return $http.post('/carts', {item}).then(function (cart) {
+    return $http.post('http://mean-cart.abramswebdevelopment.com/carts', {item}).then(function (cart) {
       $cookies.put('cart_id', cart.data._id);
       return cart.data;
     })
   }
 
   ShoppingCart.showCart = function (cookie) {
-    return $http.get('/carts/' + cookie).then(function (cart) {
+    return $http.get('http://mean-cart.abramswebdevelopment.com/carts/' + cookie).then(function (cart) {
       return Promise.all(cart.data.items.map(function (item) {
-        return $http.get('/teas/' + item.item_id);
+        return $http.get('http://mean-cart.abramswebdevelopment.com/teas/' + item.item_id);
       })).then(function (items) {
         items = items.map(function (item) {
           for (var i = 0; i < cart.data.items.length; i++) {
@@ -84,7 +84,7 @@ app.factory('TeasHelper', ['$http', function ($http) {
   var Teas = {};
 
   Teas.getTeas = function () {
-    return $http.get('/teas').then(function (results) {
+    return $http.get('http://mean-cart.abramswebdevelopment.com/teas').then(function (results) {
       teas = results.data;
       categories = results.data.reduce(function (prev, curr) {
         return prev.concat(curr.categories);
